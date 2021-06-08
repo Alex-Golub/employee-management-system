@@ -44,7 +44,8 @@ public class SwaggerConfig {
             .protocols(new LinkedHashSet<>(Arrays.asList("HTTP", "HTTPS")))
             .apiInfo(apiInfo)
             .select()
-            .apis(RequestHandlerSelectors.basePackage("edu.mrdrprof.app"))
+//            .apis(RequestHandlerSelectors.basePackage("edu.mrdrprof.app")) // actuator endpoints are hidden
+            .apis(RequestHandlerSelectors.any()) // exposes all application endpoints
             .paths(PathSelectors.any()) // scan all available controller methods
             .build();
   }

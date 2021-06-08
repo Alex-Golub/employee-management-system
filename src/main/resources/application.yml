@@ -9,11 +9,19 @@ spring:
   jpa:
     hibernate:
       ddl-auto: update
+
 server:
   servlet:
     context-path: "/api"
   error:
     include-message: always
+
+# Monitoring
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"
 
 # Swagger operation description values
 EmployeeController:
