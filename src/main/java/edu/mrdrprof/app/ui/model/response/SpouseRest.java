@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.springframework.hateoas.RepresentationModel;
 
 /**
  * @author Alex Golub
@@ -13,7 +14,7 @@ import lombok.Setter;
 @AllArgsConstructor
 @Getter
 @Setter
-public class SpouseRest {
+public class SpouseRest extends RepresentationModel<SpouseRest> {
   private String publicId;
   private String firstName;
   private String lastName;

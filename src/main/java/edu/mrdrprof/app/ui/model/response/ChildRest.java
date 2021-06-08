@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.springframework.hateoas.RepresentationModel;
 
 import java.util.Date;
 
@@ -15,7 +16,7 @@ import java.util.Date;
 @AllArgsConstructor
 @Getter
 @Setter
-public class ChildRest {
+public class ChildRest extends RepresentationModel<ChildRest> {
   private String publicId;
   private String firstName;
   private String lastName;

@@ -6,20 +6,17 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.springframework.hateoas.RepresentationModel;
 
-import java.util.List;
-
 /**
+ * This light object will be sent as response for getEmployee.
+ * links will be added to this employee using HATEOAS
+ *
  * @author Alex Golub
- * @since 06-Jun-21, 10:13 PM
+ * @since 08-Jun-21, 1:05 PM
  */
-@NoArgsConstructor
 @AllArgsConstructor
+@NoArgsConstructor
 @Getter
 @Setter
-public class EmployeeRest extends RepresentationModel<EmployeeRest> {
+public class SingleEmployeeRest extends RepresentationModel<SingleEmployeeRest> {
   private String publicId;
-  private GeneralDetailsRest generalDetails;
-  private SpouseRest spouse;
-  private List<AddressRest> addresses;
-  private List<ChildRest> children;
 }

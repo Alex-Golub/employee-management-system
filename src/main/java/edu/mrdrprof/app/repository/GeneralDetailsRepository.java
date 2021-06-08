@@ -11,4 +11,5 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface GeneralDetailsRepository extends JpaRepository<GeneralDetails, Long> {
   GeneralDetails findGeneralDetailsByEmailAndSsn(String email, String ssn);
+  GeneralDetails findGeneralDetailsByPublicId(String detailsId);
 }
