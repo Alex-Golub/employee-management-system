@@ -2,6 +2,7 @@ package edu.mrdrprof.app.service.impl;
 
 import edu.mrdrprof.app.io.entity.Child;
 import edu.mrdrprof.app.repository.ChildRepository;
+import edu.mrdrprof.app.service.ChildService;
 import edu.mrdrprof.app.shared.ChildDto;
 import lombok.AllArgsConstructor;
 import org.modelmapper.ModelMapper;

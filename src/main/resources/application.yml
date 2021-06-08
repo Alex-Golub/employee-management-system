@@ -14,3 +14,53 @@ server:
     context-path: "/api"
   error:
     include-message: always
+
+# Swagger operation description values
+EmployeeController:
+  createEmployee:
+    value: "Create new employee"
+    notes: "Create new employee by providing all the necessary fields as JSON format"
+  getEmployee:
+    value: "Get single employee"
+    notes: "Return single employee information with links to associated information"
+  getListOfEmployees:
+    value: "Get list of employees"
+    notes: "Return list of employees by the amount specified by the query string"
+  updateEmployee:
+    value: "Update employee information"
+    notes: "\"Heavy\" operation, updating all employee fields to the new values passed as JSON"
+  patchGeneralDetails:
+    value: "Patch employee general details"
+    notes: "\"Light\" operation, updating only employee general details"
+  patchSpouse:
+    value: "Patch employee spouse details"
+    notes: "\"Light\" operation, updating only employee spouse details"
+  patchAddress:
+    value: "Patch employee address details"
+    notes: "\"Light\" operation, updating only one employee address details.\n
+    NB: Employee can have one or more addresses, each address can be updated by providing its public id"
+  patchChild:
+    value: "Patch employee child details"
+    notes: "\"Light\" operation, updating only one employee child details.\n
+    NB: Employee can have zero or more children, each child can be updated by providing its public id"
+  deleteEmployee:
+    value: "Delete employee"
+    notes: "Permanently deleting employee with all associated data from the system"
+  getEmployeeGeneralDetails:
+    value: "Get employee general details"
+    notes: "Returns employee general details with link to this employee"
+  getEmployeeSpouseDetails:
+    value: "Get employee spouse details"
+    notes: "Returns employee spouse details with link to this employee"
+  getEmployeeAddress:
+    value: "Get employee address details"
+    notes: "Returns employee address details with links to: employee, list of all addresses"
+  getEmployeeAddresses:
+    value: "Get employee list of all addresses"
+    notes: "Returns all addresses details with links to each address and link to this employee"
+  getEmployeeChild:
+    value: "Get employee child details"
+    notes: "Returns single child details with link to all children and link to this employee"
+  getChildren:
+    value: "Get employee list of all children"
+    notes: "Returns all children details with links to each child and link to this employee"

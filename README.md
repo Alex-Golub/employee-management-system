@@ -1,0 +1,3 @@
+- H2-console available at `http://localhost:{port#}/h2-console`
+  - Fill JDBC URL field with the following URL => `jdbc:h2:mem:employee-management`
+- Swagger UI page available at `http://localhost:{port#}/api/swagger-ui/#`
