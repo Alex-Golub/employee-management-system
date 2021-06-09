@@ -1,5 +1,6 @@
 package edu.mrdrprof.app.service.impl;
 
+import edu.mrdrprof.app.aspects.annotations.PerformanceLogger;
 import edu.mrdrprof.app.exceptions.ExceptionMessages;
 import edu.mrdrprof.app.exceptions.model.AddressNotExistsException;
 import edu.mrdrprof.app.exceptions.model.ChildNotExistsException;
@@ -76,6 +77,7 @@ public class EmployeeServiceImpl implements EmployeeService {
   }
 
   @Override
+  @PerformanceLogger
   public EmployeeDto updateEmployee(String empId, EmployeeDto employeeDto) {
     patchGeneralDetails(empId, employeeDto.getGeneralDetails());
     patchSpouse(empId, employeeDto.getSpouse());
