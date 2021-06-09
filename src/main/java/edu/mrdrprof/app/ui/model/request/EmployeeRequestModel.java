@@ -5,6 +5,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import javax.validation.Valid;
 import java.util.List;
 
 /**
@@ -16,8 +17,12 @@ import java.util.List;
 @Getter
 @Setter
 public class EmployeeRequestModel {
+  @Valid
   private GeneralDetailsRequestModel generalDetails;
+  @Valid
   private SpouseRequestModel spouse;
-  private List<AddressRequestModel> addresses;
-  private List<ChildRequestModel> children;
+  @Valid
+  private List<@Valid AddressRequestModel> addresses;
+  @Valid
+  private List<@Valid ChildRequestModel> children;
 }

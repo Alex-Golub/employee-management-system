@@ -7,6 +7,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import javax.validation.constraints.NotBlank;
 import java.util.Date;
 
 /**
@@ -18,7 +19,9 @@ import java.util.Date;
 @Getter
 @Setter
 public class ChildRequestModel {
+  @NotBlank
   private String firstName;
+  @NotBlank
   private String lastName;
   @JsonDeserialize(using = DateHandler.class)
   private Date birthDate;

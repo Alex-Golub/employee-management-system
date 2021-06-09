@@ -7,8 +7,14 @@ import edu.mrdrprof.app.exceptions.model.EmployeeNotExistsException;
 import edu.mrdrprof.app.ui.model.response.HttpResponse;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.FieldError;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+import org.springframework.web.context.request.WebRequest;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import static org.springframework.http.HttpStatus.INTERNAL_SERVER_ERROR;
 
@@ -39,6 +45,22 @@ public class AppExceptionHandler {
   @ExceptionHandler(EmployeeNotExistsException.class)
   public ResponseEntity<HttpResponse> employeeNotExistsException() {
     return generateHttpResponse(HttpStatus.NOT_FOUND, ExceptionMessages.EMPLOYEE_NOT_EXISTS.getMsg());
+  }
+
+  @ExceptionHandler(MethodArgumentNotValidException.class) // display field and message that are incorrect (validator)
+  public ResponseEntity<?> handleUserMethodFieldErrors(MethodArgumentNotValidException ex, WebRequest request) {
+    final List<FieldError> fieldErrors = ex.getBindingResult().getFieldErrors();
+    final List<CustomFieldError> customFieldErrors = new ArrayList<>();
+
+    for (FieldError fieldError : fieldErrors) {
+      final String field = fieldError.getField();
+      final String message = fieldError.getDefaultMessage();
+      final CustomFieldError customFieldError = CustomFieldError.builder().field(field).message(message).build();
+
+      customFieldErrors.add(customFieldError);
+    }
+
+    return ResponseEntity.badRequest().body(customFieldErrors);
   }
 
   // any other unhandled exceptions will be handled by this handler

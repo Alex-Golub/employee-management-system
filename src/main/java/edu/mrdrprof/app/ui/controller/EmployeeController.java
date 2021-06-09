@@ -16,6 +16,7 @@ import org.springframework.hateoas.Link;
 import org.springframework.hateoas.server.mvc.WebMvcLinkBuilder;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 
 /**
@@ -25,7 +26,7 @@ import java.util.List;
 @RestController
 @RequestMapping(path = "/employee")
 @AllArgsConstructor
-public class EmployeeController extends AppExceptionHandler {
+public class EmployeeController {
   private final EmployeeService employeeService;
   private final GeneralDetailsService generalDetailsService;
   private final SpouseService spouseService;
@@ -41,7 +42,7 @@ public class EmployeeController extends AppExceptionHandler {
   @PostMapping
   public EmployeeRest createEmployee(
           @ApiParam(value = "All employee details as JSON", required = true)
-          @RequestBody EmployeeRequestModel employeeRequestModel) {
+          @RequestBody @Valid EmployeeRequestModel employeeRequestModel) {
     EmployeeDto empDto = mapper.map(employeeRequestModel, EmployeeDto.class);
     EmployeeDto newEmployee = employeeService.createEmployee(empDto);
 
@@ -105,7 +106,7 @@ public class EmployeeController extends AppExceptionHandler {
           @ApiParam(value = "Employee public id", example = "e.g. TmpTb4efBF9IqS46Zrio", required = true)
           @PathVariable String empId,
           @ApiParam(value = "JSON with new employee values", required = true)
-          @RequestBody EmployeeRequestModel requestModel) {
+          @RequestBody @Valid EmployeeRequestModel requestModel) {
     EmployeeDto empDto = mapper.map(requestModel, EmployeeDto.class);
     EmployeeDto updatedEmployee = employeeService.updateEmployee(empId, empDto);
 
@@ -122,7 +123,7 @@ public class EmployeeController extends AppExceptionHandler {
           @ApiParam(value = "Employee public id", example = "e.g. TmpTb4efBF9IqS46Zrio", required = true)
           @PathVariable String empId,
           @ApiParam(value = "JSON with updated general details ", required = true)
-          @RequestBody GeneralDetailsRequestModel detailsRequestModel) {
+          @RequestBody @Valid GeneralDetailsRequestModel detailsRequestModel) {
     GeneralDetailsDto detailsDto = mapper.map(detailsRequestModel, GeneralDetailsDto.class);
     GeneralDetailsDto detailsDtoPatched = employeeService.patchGeneralDetails(empId, detailsDto);
 
@@ -139,7 +140,7 @@ public class EmployeeController extends AppExceptionHandler {
           @ApiParam(value = "Employee public id", example = "e.g. TmpTb4efBF9IqS46Zrio", required = true)
           @PathVariable String empId,
           @ApiParam(value = "JSON with updated spouse details ", required = true)
-          @RequestBody SpouseRequestModel spouseRequestModel) {
+          @RequestBody @Valid SpouseRequestModel spouseRequestModel) {
     SpouseDto spouseDto = mapper.map(spouseRequestModel, SpouseDto.class);
     SpouseDto spouseDtoPatched = employeeService.patchSpouse(empId, spouseDto);
 
@@ -158,7 +159,7 @@ public class EmployeeController extends AppExceptionHandler {
           @ApiParam(value = "Address public id", example = "e.g. dWgnpLpv7daEo3p8Cz3f", required = true)
           @PathVariable String addressId,
           @ApiParam(value = "JSON with updated address details ", required = true)
-          @RequestBody AddressRequestModel addressRequestModel) {
+          @RequestBody @Valid AddressRequestModel addressRequestModel) {
     AddressDto addressDto = mapper.map(addressRequestModel, AddressDto.class);
     AddressDto addressDtoPatched = employeeService.patchAddress(empId, addressId, addressDto);
 
@@ -177,7 +178,7 @@ public class EmployeeController extends AppExceptionHandler {
           @ApiParam(value = "Child public id", example = "e.g. Jv0aPkvQcG8D53hiRzM2", required = true)
           @PathVariable String childId,
           @ApiParam(value = "JSON with updated child details ", required = true)
-          @RequestBody ChildRequestModel childRequestModel) {
+          @RequestBody @Valid ChildRequestModel childRequestModel) {
     ChildDto childDto = mapper.map(childRequestModel, ChildDto.class);
     ChildDto childDtoPatched = employeeService.patchChild(empId, childId, childDto);
 
