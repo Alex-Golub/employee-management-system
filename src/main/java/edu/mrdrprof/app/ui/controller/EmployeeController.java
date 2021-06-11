@@ -13,6 +13,7 @@ import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.EntityModel;
 import org.springframework.hateoas.Link;
 import org.springframework.hateoas.server.mvc.WebMvcLinkBuilder;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -30,9 +31,10 @@ public class EmployeeController {
   private final ModelMapper mapper;
 
   // http://localhost:{port#}/{context-path}/employee
-  @ApiOperation(value = "${EmployeeController.createEmployee.value}",
-                notes = "${EmployeeController.createEmployee.notes}")
+  @ApiOperation(value = "${createEmployee.value}",
+                notes = "${createEmployee.notes}")
   @PostMapping
+  @ResponseStatus(HttpStatus.CREATED)
   public EmployeeRest createEmployee(
           @ApiParam(value = "All employee details as JSON", required = true)
           @RequestBody @Valid EmployeeRequestModel employeeRequestModel) {
@@ -43,11 +45,11 @@ public class EmployeeController {
   }
 
   // http://localhost:{port#}/{context-path}/employee/{empId}
-  @ApiOperation(value = "${EmployeeController.getEmployee.value}",
-                notes = "${EmployeeController.getEmployee.notes}")
+  @ApiOperation(value = "${getEmployee.value}",
+                notes = "${getEmployee.notes}")
   @GetMapping(path = "/{empId}")
   public EntityModel<SingleEmployeeRest> getEmployee(
-          @ApiParam(value = "Employee public id", example = "e.g. TmpTb4efBF9IqS46Zrio", required = true)
+          @ApiParam(value = "${emp.id}", example = "e.g. TmpTb4efBF9IqS46Zrio", required = true)
           @PathVariable String empId) {
     EmployeeDto employeeDto = employeeService.getEmployeeById(empId);
     SingleEmployeeRest singleEmployeeRest = mapper.map(employeeDto, SingleEmployeeRest.class);
@@ -61,8 +63,8 @@ public class EmployeeController {
 
   // http://localhost:{port#}/{context-path}/employee?page=1&limit=5
   // e.g. page = 1, limit = 2, two employee entries per page
-  @ApiOperation(value = "${EmployeeController.getListOfEmployees.value}",
-                notes = "${EmployeeController.getListOfEmployees.notes}")
+  @ApiOperation(value = "${getListOfEmployees.value}",
+                notes = "${getListOfEmployees.notes}")
   @GetMapping
   public CollectionModel<SingleEmployeeRest> getListOfEmployees(
           @ApiParam(value = "How many pages of employee entries to return")
@@ -70,8 +72,8 @@ public class EmployeeController {
           @ApiParam(value = "How many employees entries per-page to return")
           @RequestParam(value = "limit", defaultValue = "5") int limit) {
     List<EmployeeDto> employeeDtos = employeeService.getEmployees(page, limit);
-    List<SingleEmployeeRest> singleEmployeeRests = mapper.map(employeeDtos, new TypeToken<List<SingleEmployeeRest>>() {
-    }.getType());
+    List<SingleEmployeeRest> singleEmployeeRests = mapper.map(employeeDtos,
+            new TypeToken<List<SingleEmployeeRest>>() {}.getType());
 
     for (SingleEmployeeRest employeeRest : singleEmployeeRests) {
       employeeRest.add(
@@ -86,11 +88,11 @@ public class EmployeeController {
   }
 
   // http://localhost:{port#}/{context-path}/employee/{empId}
-  @ApiOperation(value = "${EmployeeController.updateEmployee.value}",
-                notes = "${EmployeeController.updateEmployee.notes}")
+  @ApiOperation(value = "${updateEmployee.value}",
+                notes = "${updateEmployee.notes}")
   @PutMapping(path = "/{empId}")
   public EmployeeRest updateEmployee(
-          @ApiParam(value = "Employee public id", example = "e.g. TmpTb4efBF9IqS46Zrio", required = true)
+          @ApiParam(value = "${emp.id}", example = "e.g. TmpTb4efBF9IqS46Zrio", required = true)
           @PathVariable String empId,
           @ApiParam(value = "JSON with new employee values", required = true)
           @RequestBody @Valid EmployeeRequestModel requestModel) {
@@ -101,11 +103,11 @@ public class EmployeeController {
   }
 
   // http://localhost:{port#}/{context-path}/employee/{empId}/general-details
-  @ApiOperation(value = "${EmployeeController.patchGeneralDetails.value}",
-                notes = "${EmployeeController.patchGeneralDetails.notes}")
+  @ApiOperation(value = "${patchGeneralDetails.value}",
+                notes = "${patchGeneralDetails.notes}")
   @PatchMapping(path = "/{empId}/general-details")
   public GeneralDetailsRest patchGeneralDetails(
-          @ApiParam(value = "Employee public id", example = "e.g. TmpTb4efBF9IqS46Zrio", required = true)
+          @ApiParam(value = "${emp.id}", example = "e.g. TmpTb4efBF9IqS46Zrio", required = true)
           @PathVariable String empId,
           @ApiParam(value = "JSON with updated general details ", required = true)
           @RequestBody @Valid GeneralDetailsRequestModel detailsRequestModel) {
@@ -116,11 +118,11 @@ public class EmployeeController {
   }
 
   // http://localhost:{port#}/{context-path}/employee/{empId}/spouse
-  @ApiOperation(value = "${EmployeeController.patchSpouse.value}",
-                notes = "${EmployeeController.patchSpouse.notes}")
+  @ApiOperation(value = "${patchSpouse.value}",
+                notes = "${patchSpouse.notes}")
   @PatchMapping(path = "/{empId}/spouse")
   public SpouseRest patchSpouse(
-          @ApiParam(value = "Employee public id", example = "e.g. TmpTb4efBF9IqS46Zrio", required = true)
+          @ApiParam(value = "${emp.id}", example = "e.g. TmpTb4efBF9IqS46Zrio", required = true)
           @PathVariable String empId,
           @ApiParam(value = "JSON with updated spouse details ", required = true)
           @RequestBody @Valid SpouseRequestModel spouseRequestModel) {
@@ -131,11 +133,11 @@ public class EmployeeController {
   }
 
   // http://localhost:{port#}/{context-path}/employee/{empId}/address
-  @ApiOperation(value = "${EmployeeController.patchAddress.value}",
-                notes = "${EmployeeController.patchAddress.notes}")
+  @ApiOperation(value = "${patchAddress.value}",
+                notes = "${patchAddress.notes}")
   @PatchMapping(path = "/{empId}/address/{addressId}")
   public AddressRest patchAddress(
-          @ApiParam(value = "Employee public id", example = "e.g. TmpTb4efBF9IqS46Zrio", required = true)
+          @ApiParam(value = "${emp.id}", example = "e.g. TmpTb4efBF9IqS46Zrio", required = true)
           @PathVariable String empId,
           @ApiParam(value = "Address public id", example = "e.g. dWgnpLpv7daEo3p8Cz3f", required = true)
           @PathVariable String addressId,
@@ -148,11 +150,11 @@ public class EmployeeController {
   }
 
   // http://localhost:{port#}/{context-path}/employee/{empId}/child/{childId}
-  @ApiOperation(value = "${EmployeeController.patchChild.value}",
-                notes = "${EmployeeController.patchChild.notes}")
+  @ApiOperation(value = "${patchChild.value}",
+                notes = "${patchChild.notes}")
   @PatchMapping(path = "/{empId}/child/{childId}")
   public ChildRest patchChild(
-          @ApiParam(value = "Employee public id", example = "e.g. TmpTb4efBF9IqS46Zrio", required = true)
+          @ApiParam(value = "${emp.id}", example = "e.g. TmpTb4efBF9IqS46Zrio", required = true)
           @PathVariable String empId,
           @ApiParam(value = "Child public id", example = "e.g. Jv0aPkvQcG8D53hiRzM2", required = true)
           @PathVariable String childId,
@@ -165,21 +167,22 @@ public class EmployeeController {
   }
 
   // http://localhost:{port#}/{context-path}/employee/{empId}
-  @ApiOperation(value = "${EmployeeController.deleteEmployee.value}",
-                notes = "${EmployeeController.deleteEmployee.notes}")
+  @ApiOperation(value = "${deleteEmployee.value}",
+                notes = "${deleteEmployee.notes}")
   @DeleteMapping(path = "/{empId}")
+  @ResponseStatus(HttpStatus.NO_CONTENT)
   public void deleteEmployee(
-          @ApiParam(value = "Employee public id", example = "e.g. TmpTb4efBF9IqS46Zrio", required = true)
+          @ApiParam(value = "${emp.id}", example = "e.g. TmpTb4efBF9IqS46Zrio", required = true)
           @PathVariable String empId) {
     employeeService.deleteEmployee(empId);
   }
 
   // http://localhost:{port#}/{context-path}/employee/{empId}/general-details/{detailsId}
-  @ApiOperation(value = "${EmployeeController.getEmployeeGeneralDetails.value}",
-                notes = "${EmployeeController.getEmployeeGeneralDetails.notes}")
+  @ApiOperation(value = "${getEmployeeGeneralDetails.value}",
+                notes = "${getEmployeeGeneralDetails.notes}")
   @GetMapping(path = "/{empId}/general-details/{detailsId}")
   public EntityModel<GeneralDetailsRest> getEmployeeGeneralDetails(
-          @ApiParam(value = "Employee public id", example = "e.g. TmpTb4efBF9IqS46Zrio", required = true)
+          @ApiParam(value = "${emp.id}", example = "e.g. TmpTb4efBF9IqS46Zrio", required = true)
           @PathVariable String empId,
           @ApiParam(value = "General details public id", example = "e.g. fgRwCPzJnXpqCvr0XmGX", required = true)
           @PathVariable String detailsId) {
@@ -190,11 +193,11 @@ public class EmployeeController {
   }
 
   // http://localhost:{port#}/{context-path}/employee/{empId}/spouse/{spouseId}
-  @ApiOperation(value = "${EmployeeController.getEmployeeSpouseDetails.value}",
-                notes = "${EmployeeController.getEmployeeSpouseDetails.notes}")
+  @ApiOperation(value = "${getEmployeeSpouseDetails.value}",
+                notes = "${getEmployeeSpouseDetails.notes}")
   @GetMapping(path = "/{empId}/spouse/{spouseId}")
   public EntityModel<SpouseRest> getEmployeeSpouseDetails(
-          @ApiParam(value = "Employee public id", example = "e.g. TmpTb4efBF9IqS46Zrio", required = true)
+          @ApiParam(value = "${emp.id}", example = "e.g. TmpTb4efBF9IqS46Zrio", required = true)
           @PathVariable String empId,
           @ApiParam(value = "Spouse public id", example = "e.g. yFHWSuHs2DlgjikSpP02", required = true)
           @PathVariable String spouseId) {
@@ -205,11 +208,11 @@ public class EmployeeController {
   }
 
   // http://localhost:{port#}/{context-path}/employee/{empId}/address/{addressId}
-  @ApiOperation(value = "${EmployeeController.getEmployeeAddress.value}",
-                notes = "${EmployeeController.getEmployeeAddress.notes}")
+  @ApiOperation(value = "${getEmployeeAddress.value}",
+                notes = "${getEmployeeAddress.notes}")
   @GetMapping(path = "/{empId}/address/{addressId}")
   public EntityModel<AddressRest> getEmployeeAddress(
-          @ApiParam(value = "Employee public id", example = "e.g. TmpTb4efBF9IqS46Zrio", required = true)
+          @ApiParam(value = "${emp.id}", example = "e.g. TmpTb4efBF9IqS46Zrio", required = true)
           @PathVariable String empId,
           @ApiParam(value = "Address public id", example = "e.g. dWgnpLpv7daEo3p8Cz3f", required = true)
           @PathVariable String addressId) {
@@ -220,15 +223,14 @@ public class EmployeeController {
   }
 
   // http://localhost:{port#}/{context-path}/employee/{empId}/addresses
-  @ApiOperation(value = "${EmployeeController.getEmployeeAddresses.value}",
-                notes = "${EmployeeController.getEmployeeAddresses.notes}")
+  @ApiOperation(value = "${getEmployeeAddresses.value}",
+                notes = "${getEmployeeAddresses.notes}")
   @GetMapping(path = "/{empId}/addresses")
   public CollectionModel<AddressRest> getEmployeeAddresses(
-          @ApiParam(value = "Employee public id", example = "e.g. TmpTb4efBF9IqS46Zrio", required = true)
+          @ApiParam(value = "${emp.id}", example = "e.g. TmpTb4efBF9IqS46Zrio", required = true)
           @PathVariable String empId) {
     List<AddressDto> addressDto = employeeService.getAddresses(empId);
-    List<AddressRest> addressRest = mapper.map(addressDto, new TypeToken<List<AddressRest>>() {
-    }.getType());
+    List<AddressRest> addressRest = mapper.map(addressDto, new TypeToken<List<AddressRest>>() {}.getType());
 
     // add self relation link for each address
     for (AddressRest address : addressRest) {
@@ -244,11 +246,11 @@ public class EmployeeController {
   }
 
   // http://localhost:{port#}/{context-path}/employee/{empId}/child/{childId}
-  @ApiOperation(value = "${EmployeeController.getEmployeeChild.value}",
-                notes = "${EmployeeController.getEmployeeChild.notes}")
+  @ApiOperation(value = "${getEmployeeChild.value}",
+                notes = "${getEmployeeChild.notes}")
   @GetMapping(path = "/{empId}/child/{childId}")
   public EntityModel<ChildRest> getEmployeeChild(
-          @ApiParam(value = "Employee public id", example = "e.g. TmpTb4efBF9IqS46Zrio", required = true)
+          @ApiParam(value = "${emp.id}", example = "e.g. TmpTb4efBF9IqS46Zrio", required = true)
           @PathVariable String empId,
           @ApiParam(value = "Child public id", example = "e.g. Jv0aPkvQcG8D53hiRzM2", required = true)
           @PathVariable String childId) {
@@ -259,15 +261,14 @@ public class EmployeeController {
   }
 
   // http://localhost:{port#}/{context-path}/employee/{empId}/children
-  @ApiOperation(value = "${EmployeeController.getChildren.value}",
-                notes = "${EmployeeController.getChildren.notes}")
+  @ApiOperation(value = "${getChildren.value}",
+                notes = "${getChildren.notes}")
   @GetMapping(path = "/{empId}/children")
   public CollectionModel<ChildRest> getChildren(
-          @ApiParam(value = "Employee public id", example = "e.g. TmpTb4efBF9IqS46Zrio", required = true)
+          @ApiParam(value = "${emp.id}", example = "e.g. TmpTb4efBF9IqS46Zrio", required = true)
           @PathVariable String empId) {
     List<ChildDto> childDtoList = employeeService.getChildren(empId);
-    List<ChildRest> childRestList = mapper.map(childDtoList, new TypeToken<List<ChildRest>>() {
-    }.getType());
+    List<ChildRest> childRestList = mapper.map(childDtoList, new TypeToken<List<ChildRest>>() {}.getType());
 
     for (ChildRest childRest : childRestList) {
       childRest.add(

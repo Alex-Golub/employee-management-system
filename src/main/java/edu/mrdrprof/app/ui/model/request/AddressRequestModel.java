@@ -1,5 +1,6 @@
 package edu.mrdrprof.app.ui.model.request;
 
+import edu.mrdrprof.app.io.entity.AddressType;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -25,6 +26,5 @@ public class AddressRequestModel {
   private String streetName;
   @NotBlank
   private String postalCode;
-  @NotBlank
-  private String type;
+  private AddressType type;
 }

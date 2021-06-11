@@ -1,5 +1,6 @@
 package edu.mrdrprof.app.shared;
 
+import edu.mrdrprof.app.io.entity.Sex;
 import lombok.*;
 
 import java.io.Serializable;
@@ -20,6 +21,7 @@ public class ChildDto implements Serializable {
   private String publicId;
   private String firstName;
   private String lastName;
+  private Sex sex;
   private Date birthDate;
   private EmployeeDto employee;
 }

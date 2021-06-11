@@ -1,5 +1,6 @@
 package edu.mrdrprof.app.ui.model.request;
 
+import edu.mrdrprof.app.io.entity.Sex;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -28,6 +29,5 @@ public class SpouseRequestModel {
   private String phoneNumber;
   @NotBlank
   private String ssn;
-  @NotBlank
-  private String sex;
+  private Sex sex;
 }

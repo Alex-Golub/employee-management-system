@@ -1,9 +1,6 @@
 package edu.mrdrprof.app.io.entity;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -18,6 +15,7 @@ import java.util.Date;
 @AllArgsConstructor
 @Getter
 @Setter
+@Builder
 public class Child implements Serializable {
   private static final long serialVersionUID = -3906891424799252905L;
   @Id
@@ -31,6 +29,9 @@ public class Child implements Serializable {
   private String lastName;
   @Column(nullable = false)
   private Date birthDate;
+  @Column(nullable = false, length = 10)
+  @Enumerated(EnumType.STRING)
+  private Sex sex;
   @ManyToOne
   @JoinColumn(name = "employee_id")
   private Employee employee;

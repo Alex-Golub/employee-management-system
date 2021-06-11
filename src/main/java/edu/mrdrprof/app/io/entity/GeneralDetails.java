@@ -4,7 +4,6 @@ import lombok.*;
 
 import javax.persistence.*;
 import java.io.Serializable;
-import java.time.LocalDate;
 import java.util.Date;
 
 /**
@@ -35,7 +34,8 @@ public class GeneralDetails implements Serializable {
   @Column(nullable = false, length = 20/*, unique = true*/)
   private String ssn; // Social Security Number
   @Column(nullable = false, length = 10)
-  private String sex;
+  @Enumerated(EnumType.STRING)
+  private Sex sex;
   @Column(nullable = false)
   private Date hireDate;
   @OneToOne

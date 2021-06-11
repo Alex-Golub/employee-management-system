@@ -33,7 +33,8 @@ public class Spouse implements Serializable {
   @Column(nullable = false, length = 20)
   private String ssn;
   @Column(nullable = false, length = 10)
-  private String sex;
+  @Enumerated(EnumType.STRING)
+  private Sex sex;
   @OneToOne
   @JoinColumn(name = "employee_id")
   private Employee employee;

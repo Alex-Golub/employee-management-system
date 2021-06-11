@@ -1,5 +1,6 @@
 package edu.mrdrprof.app.ui.model.response;
 
+import edu.mrdrprof.app.io.entity.AddressType;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -20,5 +21,5 @@ public class AddressRest extends RepresentationModel<AddressRest> {
   private String country;
   private String streetName;
   private String postalCode;
-  private String type;
+  private AddressType type;
 }

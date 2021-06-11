@@ -1,6 +1,7 @@
 package edu.mrdrprof.app.ui.model.request;
 
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import edu.mrdrprof.app.io.entity.Sex;
 import edu.mrdrprof.app.shared.utils.DateHandler;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -30,8 +31,7 @@ public class GeneralDetailsRequestModel {
   private String phoneNumber;
   @NotBlank
   private String ssn;
-  @NotBlank
-  private String sex;
+  private Sex sex;
   @JsonDeserialize(using = DateHandler.class)
   private Date hireDate; // "dd-MM-yyyy"
 }

@@ -31,7 +31,8 @@ public class Address implements Serializable {
   @Column(nullable = false, length = 10)
   private String postalCode;
   @Column(nullable = false, length = 10)
-  private String type;
+  @Enumerated(EnumType.STRING)
+  private AddressType type;
   @ManyToOne
   @JoinColumn(name = "employee_id")
   private Employee employee;

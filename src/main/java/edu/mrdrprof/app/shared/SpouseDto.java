@@ -1,9 +1,7 @@
 package edu.mrdrprof.app.shared;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import edu.mrdrprof.app.io.entity.Sex;
+import lombok.*;
 
 /**
  * @author Alex Golub
@@ -13,6 +11,7 @@ import lombok.Setter;
 @AllArgsConstructor
 @Getter
 @Setter
+@Builder
 public class SpouseDto {
   private Long id;
   private String publicId;
@@ -21,6 +20,6 @@ public class SpouseDto {
   private String email;
   private String phoneNumber;
   private String ssn;
-  private String sex;
+  private Sex sex;
   private EmployeeDto employee;
 }

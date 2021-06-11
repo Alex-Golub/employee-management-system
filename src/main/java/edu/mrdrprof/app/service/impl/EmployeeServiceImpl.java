@@ -9,11 +9,14 @@ import edu.mrdrprof.app.service.EmployeeService;
 import edu.mrdrprof.app.shared.*;
 import edu.mrdrprof.app.shared.utils.Utils;
 import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.TypeToken;
 import org.springframework.beans.BeanUtils;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.ResponseStatus;
 
 import javax.transaction.Transactional;
 import java.util.List;
@@ -26,7 +29,7 @@ import static edu.mrdrprof.app.exceptions.ExceptionMessages.*;
  * @since 06-Jun-21, 9:45 PM
  */
 @Service
-@AllArgsConstructor
+@RequiredArgsConstructor
 @Transactional
 public class EmployeeServiceImpl implements EmployeeService {
   private final EmployeeRepository employeeRepository;
@@ -54,7 +57,7 @@ public class EmployeeServiceImpl implements EmployeeService {
   }
 
   @Override
-  public List<EmployeeDto> getEmployees(int page, int limit) {
+  public List<EmployeeDto> getEmployees(int page, int limit) { // TODO test
     if (page > 0) page--; // offset page to start at index 1 rather the 0 based
 
     return employeeRepository.findAll(PageRequest.of(page, limit))
@@ -90,33 +93,6 @@ public class EmployeeServiceImpl implements EmployeeService {
     return mapper.map(employee, EmployeeDto.class);
   }
 
-  private void updateAddressesList(List<AddressDto> addressDtoList, Employee employee) {
-    // remove all previous addresses of this employee
-    addressRepository.deleteInBatch(employee.getAddresses());
-    employee.getAddresses().clear();
-
-    for (AddressDto addressDto : addressDtoList) {
-      Address address = new Address();
-      BeanUtils.copyProperties(addressDto, address);
-      address.setEmployee(employee);
-      address.setPublicId(utils.generatePublicId());
-      employee.getAddresses().add(address);
-    }
-  }
-
-  private void updateChildrenList(List<ChildDto> childDtoList, Employee employee) { // TODO: test
-    childRepository.deleteInBatch(employee.getChildren());
-    employee.getChildren().clear();
-
-    for (ChildDto childDto : childDtoList) {
-      Child child = new Child();
-      BeanUtils.copyProperties(childDto, child);
-      child.setEmployee(employee);
-      child.setPublicId(utils.generatePublicId());
-      employee.getChildren().add(child);
-    }
-  }
-
   @Override
   public GeneralDetailsDto patchGeneralDetails(String empId, GeneralDetailsDto detailsDto) {
     GeneralDetails generalDetails = getEmployee(empId).getGeneralDetails();
@@ -135,35 +111,65 @@ public class EmployeeServiceImpl implements EmployeeService {
     return mapper.map(patchedSpouse, SpouseDto.class);
   }
 
+  private void updateAddressesList(List<AddressDto> addressDtoList, Employee employee) {
+    // remove all previous addresses of this employee
+    addressRepository.deleteInBatch(employee.getAddresses());
+    employee.getAddresses().clear();
+
+    for (AddressDto addressDto : addressDtoList) {
+      Address address = new Address();
+      BeanUtils.copyProperties(addressDto, address);
+      address.setEmployee(employee);
+      address.setPublicId(utils.generatePublicId());
+      employee.getAddresses().add(address);
+    }
+  }
+
+  private void updateChildrenList(List<ChildDto> childDtoList, Employee employee) {
+    childRepository.deleteInBatch(employee.getChildren());
+    employee.getChildren().clear();
+
+    for (ChildDto childDto : childDtoList) {
+      Child child = new Child();
+      BeanUtils.copyProperties(childDto, child);
+      child.setEmployee(employee);
+      child.setPublicId(utils.generatePublicId());
+      employee.getChildren().add(child);
+    }
+  }
+
   @Override
   public AddressDto patchAddress(String empId, String addressId, AddressDto addressDto) {
-    Address address = addressRepository.findAddressByPublicId(addressId);
-    if (address == null) {
-      throw new NotExistsException(String.format(ADDRESS_NOT_EXISTS.getMsg(), addressId));
-    }
+    Address foundAddress = getEmployee(empId).getAddresses()
+            .stream()
+            .filter(address -> address.getPublicId().equals(addressId))
+            .findFirst()
+            .orElseThrow(() -> new NotExistsException(String.format(ADDRESS_NOT_EXISTS.getMsg(), addressId)));
 
-    BeanUtils.copyProperties(addressDto, address, "id", "employee", "publicId");
-    Address updatedAddress = addressRepository.save(address);
+    BeanUtils.copyProperties(addressDto, foundAddress, "id", "employee", "publicId");
+    Address updatedAddress = addressRepository.save(foundAddress);
 
     return mapper.map(updatedAddress, AddressDto.class);
   }
 
   @Override
   public ChildDto patchChild(String empId, String childId, ChildDto childDto) {
-    Child child = childRepository.findChildByPublicId(childId);
-    if (child == null) {
-      throw new NotExistsException(String.format(CHILD_NOT_EXISTS.getMsg(), childId));
-    }
+    Child foundChild = getEmployee(empId).getChildren()
+            .stream()
+            .filter(child -> child.getPublicId().equals(childId))
+            .findFirst()
+            .orElseThrow(() -> new NotExistsException(String.format(CHILD_NOT_EXISTS.getMsg(), childId)));
 
-    BeanUtils.copyProperties(childDto, child, "id", "employee", "publicId");
-    Child updatedChild = childRepository.save(child);
+    BeanUtils.copyProperties(childDto, foundChild, "id", "employee", "publicId");
+    Child updatedChild = childRepository.save(foundChild);
 
     return mapper.map(updatedChild, ChildDto.class);
   }
 
   @Override
   public void deleteEmployee(String empId) {
-    employeeRepository.deleteByPublicId(empId);
+    Employee employee = getEmployee(empId);
+    employeeRepository.deleteByPublicId(employee.getPublicId());
   }
 
   @Override

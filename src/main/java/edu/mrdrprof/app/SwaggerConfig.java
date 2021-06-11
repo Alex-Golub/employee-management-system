@@ -1,5 +1,6 @@
 package edu.mrdrprof.app;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import springfox.documentation.builders.PathSelectors;
@@ -21,32 +22,35 @@ import java.util.LinkedHashSet;
 @Configuration
 @EnableSwagger2
 public class SwaggerConfig {
-  Contact contact = new Contact(
-          "Alex Golub",
-          "https://github.com/Alex-Golub",
-          "email@email.com"
-  );
-
-  ApiInfo apiInfo = new ApiInfo(
-          "Employee-Management-System",
-          "This page documents Employee-Management-System end points",
-          "1.0",
-          "#",
-          contact,
-          "Apache 2.0",
-          "http://www.apache.org/licenses/LICENSE-2.0",
-          Collections.emptyList()
-  );
+  @Value("${contact.name}") private String name;
+  @Value("${contact.url}") private String url;
+  @Value("${contact.email}") private String email;
+  @Value("${apiInfo.title}") private String title;
+  @Value("${apiInfo.description}") private String description;
+  @Value("${apiInfo.version}") private String version;
 
   @Bean
   public Docket apiDocket() {
     return new Docket(DocumentationType.SWAGGER_2)
             .protocols(new LinkedHashSet<>(Arrays.asList("HTTP", "HTTPS")))
-            .apiInfo(apiInfo)
+            .apiInfo(getApiInfo())
             .select()
 //            .apis(RequestHandlerSelectors.basePackage("edu.mrdrprof.app")) // actuator endpoints are hidden
             .apis(RequestHandlerSelectors.any()) // exposes all application endpoints
             .paths(PathSelectors.any()) // scan all available controller methods
             .build();
+  }
+
+  private ApiInfo getApiInfo() {
+    return new ApiInfo(
+            title,
+            description,
+            version,
+            "#",
+            new Contact(name, url, email),
+            "Apache 2.0",
+            "http://www.apache.org/licenses/LICENSE-2.0",
+            Collections.emptyList()
+    );
   }
 }

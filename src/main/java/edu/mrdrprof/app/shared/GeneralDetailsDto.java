@@ -1,9 +1,7 @@
 package edu.mrdrprof.app.shared;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import edu.mrdrprof.app.io.entity.Sex;
+import lombok.*;
 
 import java.io.Serializable;
 import java.util.Date;
@@ -16,6 +14,7 @@ import java.util.Date;
 @AllArgsConstructor
 @Getter
 @Setter
+@Builder
 public class GeneralDetailsDto implements Serializable {
   private static final long serialVersionUID = 8524609962376142285L;
   private Long id;
@@ -25,7 +24,7 @@ public class GeneralDetailsDto implements Serializable {
   private String email;
   private String phoneNumber;
   private String ssn;
-  private String sex;
+  private Sex sex;
   private Date hireDate;
   private EmployeeDto employee;
 }

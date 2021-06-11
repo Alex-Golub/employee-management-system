@@ -1,5 +1,6 @@
 package edu.mrdrprof.app.ui.model.response;
 
+import edu.mrdrprof.app.io.entity.Sex;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -21,5 +22,5 @@ public class SpouseRest extends RepresentationModel<SpouseRest> {
   private String email;
   private String phoneNumber;
   private String ssn;
-  private String sex;
+  private Sex sex;
 }

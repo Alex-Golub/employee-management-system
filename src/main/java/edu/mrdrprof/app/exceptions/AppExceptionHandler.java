@@ -1,5 +1,6 @@
 package edu.mrdrprof.app.exceptions;
 
+import com.fasterxml.jackson.databind.exc.InvalidFormatException;
 import edu.mrdrprof.app.exceptions.model.EmployeeExistsException;
 import edu.mrdrprof.app.exceptions.model.NotExistsException;
 import edu.mrdrprof.app.ui.model.response.HttpResponse;
@@ -51,11 +52,16 @@ public class AppExceptionHandler {
     return ResponseEntity.badRequest().body(httpResponses);
   }
 
-  // any other unhandled exceptions will be handled by this handler
-  @ExceptionHandler(Exception.class)
-  public ResponseEntity<HttpResponse> internalServerErrorException() {
-    return generateHttpResponse(INTERNAL_SERVER_ERROR, ExceptionMessages.INTERNAL_SERVER_ERROR.getMsg());
+  @ExceptionHandler(InvalidFormatException.class)
+  public ResponseEntity<HttpResponse> invalidFormatException(InvalidFormatException e) {
+    return generateHttpResponse(HttpStatus.BAD_REQUEST, e.getMessage());
   }
+
+  // any other unhandled exceptions will be handled by this handler
+//  @ExceptionHandler(Exception.class)
+//  public ResponseEntity<HttpResponse> internalServerErrorException() {
+//    return generateHttpResponse(INTERNAL_SERVER_ERROR, ExceptionMessages.INTERNAL_SERVER_ERROR.getMsg());
+//  }
 
   private ResponseEntity<HttpResponse> generateHttpResponse(HttpStatus httpStatus, String msg) {
     return new ResponseEntity<>(new HttpResponse(httpStatus.value(), httpStatus,

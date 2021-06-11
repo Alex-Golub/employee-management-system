@@ -1,5 +1,6 @@
 package edu.mrdrprof.app.shared;
 
+import edu.mrdrprof.app.io.entity.AddressType;
 import lombok.*;
 
 import java.io.Serializable;
@@ -21,6 +22,6 @@ public class AddressDto implements Serializable {
   private String country;
   private String streetName;
   private String postalCode;
-  private String type;
+  private AddressType type;
   private EmployeeDto employee;
 }

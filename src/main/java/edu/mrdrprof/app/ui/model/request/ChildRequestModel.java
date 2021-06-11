@@ -1,6 +1,7 @@
 package edu.mrdrprof.app.ui.model.request;
 
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import edu.mrdrprof.app.io.entity.Sex;
 import edu.mrdrprof.app.shared.utils.DateHandler;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -25,4 +26,5 @@ public class ChildRequestModel {
   private String lastName;
   @JsonDeserialize(using = DateHandler.class)
   private Date birthDate;
+  private Sex sex;
 }
