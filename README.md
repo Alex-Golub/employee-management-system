@@ -1,4 +1,6 @@
+- `port#` configured to 8080
 - H2-console available at `http://localhost:{port#}/h2-console`
   - Fill JDBC URL field with the following URL => `jdbc:h2:mem:employee-management`
+  - `username: sa`, no password required
 - Swagger UI page available at `http://localhost:{port#}/api/swagger-ui/#`
 - Monitoring `/actuator/{endpointName}`

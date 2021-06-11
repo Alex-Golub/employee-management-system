@@ -1,9 +1,6 @@
 package edu.mrdrprof.app.io.entity;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -17,6 +14,7 @@ import java.io.Serializable;
 @AllArgsConstructor
 @Getter
 @Setter
+@Builder
 public class Spouse implements Serializable {
   private static final long serialVersionUID = 1659478533708236931L;
   @Id

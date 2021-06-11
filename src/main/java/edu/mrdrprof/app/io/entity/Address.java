@@ -1,13 +1,9 @@
 package edu.mrdrprof.app.io.entity;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import javax.persistence.*;
 import java.io.Serializable;
-import java.util.Objects;
 
 /**
  * @author Alex Golub
@@ -18,6 +14,7 @@ import java.util.Objects;
 @AllArgsConstructor
 @Getter
 @Setter
+@Builder
 public class Address implements Serializable {
   private static final long serialVersionUID = 6387939020664788337L;
   @Id

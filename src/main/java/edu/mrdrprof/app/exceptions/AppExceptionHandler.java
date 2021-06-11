@@ -1,9 +1,7 @@
 package edu.mrdrprof.app.exceptions;
 
-import edu.mrdrprof.app.exceptions.model.AddressNotExistsException;
-import edu.mrdrprof.app.exceptions.model.ChildNotExistsException;
 import edu.mrdrprof.app.exceptions.model.EmployeeExistsException;
-import edu.mrdrprof.app.exceptions.model.EmployeeNotExistsException;
+import edu.mrdrprof.app.exceptions.model.NotExistsException;
 import edu.mrdrprof.app.ui.model.response.HttpResponse;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -11,10 +9,10 @@ import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
-import org.springframework.web.context.request.WebRequest;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import static org.springframework.http.HttpStatus.INTERNAL_SERVER_ERROR;
 
@@ -27,45 +25,35 @@ import static org.springframework.http.HttpStatus.INTERNAL_SERVER_ERROR;
 @RestControllerAdvice
 public class AppExceptionHandler {
 
-  @ExceptionHandler(AddressNotExistsException.class)
-  public ResponseEntity<HttpResponse> addressNotExists() {
-    return generateHttpResponse(HttpStatus.NOT_FOUND, ExceptionMessages.ADDRESS_NOT_FOUND.getMsg());
-  }
-
-  @ExceptionHandler(ChildNotExistsException.class)
-  public ResponseEntity<HttpResponse> childNotExists() {
-    return generateHttpResponse(HttpStatus.NOT_FOUND, ExceptionMessages.CHILD_NOT_FOUND.getMsg());
+  @ExceptionHandler(NotExistsException.class)
+  public ResponseEntity<HttpResponse> detailsNotExists(NotExistsException e) {
+    return generateHttpResponse(HttpStatus.NOT_FOUND, e.getMessage());
   }
 
   @ExceptionHandler(EmployeeExistsException.class)
-  public ResponseEntity<HttpResponse> employeeExistsException() {
-    return generateHttpResponse(HttpStatus.BAD_REQUEST, ExceptionMessages.EMPLOYEE_EXISTS_BY_EMAIL_SSN.getMsg());
+  public ResponseEntity<HttpResponse> employeeExistsException(EmployeeExistsException e) {
+    return generateHttpResponse(HttpStatus.BAD_REQUEST, e.getMessage());
   }
 
-  @ExceptionHandler(EmployeeNotExistsException.class)
-  public ResponseEntity<HttpResponse> employeeNotExistsException() {
-    return generateHttpResponse(HttpStatus.NOT_FOUND, ExceptionMessages.EMPLOYEE_NOT_EXISTS.getMsg());
-  }
+  @ExceptionHandler(MethodArgumentNotValidException.class)
+  // display field and message that are incorrect (validator)
+  public ResponseEntity<?> handleUserMethodFieldErrors(MethodArgumentNotValidException ex) {
+    final List<HttpResponse> httpResponses = new ArrayList<>();
+    for (FieldError fieldError : ex.getBindingResult().getFieldErrors()) {
+      HttpResponse httpResponse = new HttpResponse(HttpStatus.BAD_REQUEST.value(),
+              HttpStatus.BAD_REQUEST,
+              fieldError.getField(),
+              fieldError.getDefaultMessage());
 
-  @ExceptionHandler(MethodArgumentNotValidException.class) // display field and message that are incorrect (validator)
-  public ResponseEntity<?> handleUserMethodFieldErrors(MethodArgumentNotValidException ex, WebRequest request) {
-    final List<FieldError> fieldErrors = ex.getBindingResult().getFieldErrors();
-    final List<CustomFieldError> customFieldErrors = new ArrayList<>();
-
-    for (FieldError fieldError : fieldErrors) {
-      final String field = fieldError.getField();
-      final String message = fieldError.getDefaultMessage();
-      final CustomFieldError customFieldError = CustomFieldError.builder().field(field).message(message).build();
-
-      customFieldErrors.add(customFieldError);
+      httpResponses.add(httpResponse);
     }
 
-    return ResponseEntity.badRequest().body(customFieldErrors);
+    return ResponseEntity.badRequest().body(httpResponses);
   }
 
   // any other unhandled exceptions will be handled by this handler
   @ExceptionHandler(Exception.class)
-  public ResponseEntity<HttpResponse> internalServerErrorException(Exception e) {
+  public ResponseEntity<HttpResponse> internalServerErrorException() {
     return generateHttpResponse(INTERNAL_SERVER_ERROR, ExceptionMessages.INTERNAL_SERVER_ERROR.getMsg());
   }
 

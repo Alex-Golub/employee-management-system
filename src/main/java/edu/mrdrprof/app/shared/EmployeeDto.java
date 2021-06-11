@@ -1,9 +1,6 @@
 package edu.mrdrprof.app.shared;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import java.io.Serializable;
 import java.util.List;
@@ -16,6 +13,7 @@ import java.util.List;
 @AllArgsConstructor
 @Getter
 @Setter
+@Builder
 public class EmployeeDto implements Serializable {
   private static final long serialVersionUID = 8585435619909091358L;
   private Long id;

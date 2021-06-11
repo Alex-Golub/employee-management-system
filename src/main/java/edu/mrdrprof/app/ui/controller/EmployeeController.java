@@ -1,7 +1,6 @@
 package edu.mrdrprof.app.ui.controller;
 
-import edu.mrdrprof.app.exceptions.AppExceptionHandler;
-import edu.mrdrprof.app.service.*;
+import edu.mrdrprof.app.service.EmployeeService;
 import edu.mrdrprof.app.shared.*;
 import edu.mrdrprof.app.ui.model.request.*;
 import edu.mrdrprof.app.ui.model.response.*;
@@ -28,15 +27,9 @@ import java.util.List;
 @AllArgsConstructor
 public class EmployeeController {
   private final EmployeeService employeeService;
-  private final GeneralDetailsService generalDetailsService;
-  private final SpouseService spouseService;
-  private final AddressService addressService;
-  private final ChildService childService;
   private final ModelMapper mapper;
 
-  /**
-   * http://localhost:{port#}/{context-path}/employee
-   */
+  // http://localhost:{port#}/{context-path}/employee
   @ApiOperation(value = "${EmployeeController.createEmployee.value}",
                 notes = "${EmployeeController.createEmployee.notes}")
   @PostMapping
@@ -49,9 +42,7 @@ public class EmployeeController {
     return mapper.map(newEmployee, EmployeeRest.class);
   }
 
-  /**
-   * http://localhost:{port#}/{context-path}/employee/{empId}
-   */
+  // http://localhost:{port#}/{context-path}/employee/{empId}
   @ApiOperation(value = "${EmployeeController.getEmployee.value}",
                 notes = "${EmployeeController.getEmployee.notes}")
   @GetMapping(path = "/{empId}")
@@ -68,10 +59,8 @@ public class EmployeeController {
             childrenLink(empId));
   }
 
-  /**
-   * http://localhost:{port#}/{context-path}/employee?page=1&limit=5
-   * e.g. page = 1, limit = 2, two employee entries per page
-   */
+  // http://localhost:{port#}/{context-path}/employee?page=1&limit=5
+  // e.g. page = 1, limit = 2, two employee entries per page
   @ApiOperation(value = "${EmployeeController.getListOfEmployees.value}",
                 notes = "${EmployeeController.getListOfEmployees.notes}")
   @GetMapping
@@ -96,9 +85,7 @@ public class EmployeeController {
     return CollectionModel.of(singleEmployeeRests);
   }
 
-  /**
-   * http://localhost:{port#}/{context-path}/employee/{empId}
-   */
+  // http://localhost:{port#}/{context-path}/employee/{empId}
   @ApiOperation(value = "${EmployeeController.updateEmployee.value}",
                 notes = "${EmployeeController.updateEmployee.notes}")
   @PutMapping(path = "/{empId}")
@@ -113,9 +100,7 @@ public class EmployeeController {
     return mapper.map(updatedEmployee, EmployeeRest.class);
   }
 
-  /**
-   * http://localhost:{port#}/{context-path}/employee/{empId}/general-details
-   */
+  // http://localhost:{port#}/{context-path}/employee/{empId}/general-details
   @ApiOperation(value = "${EmployeeController.patchGeneralDetails.value}",
                 notes = "${EmployeeController.patchGeneralDetails.notes}")
   @PatchMapping(path = "/{empId}/general-details")
@@ -130,9 +115,7 @@ public class EmployeeController {
     return mapper.map(detailsDtoPatched, GeneralDetailsRest.class);
   }
 
-  /**
-   * http://localhost:{port#}/{context-path}/employee/{empId}/spouse
-   */
+  // http://localhost:{port#}/{context-path}/employee/{empId}/spouse
   @ApiOperation(value = "${EmployeeController.patchSpouse.value}",
                 notes = "${EmployeeController.patchSpouse.notes}")
   @PatchMapping(path = "/{empId}/spouse")
@@ -147,9 +130,7 @@ public class EmployeeController {
     return mapper.map(spouseDtoPatched, SpouseRest.class);
   }
 
-  /**
-   * http://localhost:{port#}/{context-path}/employee/{empId}/address
-   */
+  // http://localhost:{port#}/{context-path}/employee/{empId}/address
   @ApiOperation(value = "${EmployeeController.patchAddress.value}",
                 notes = "${EmployeeController.patchAddress.notes}")
   @PatchMapping(path = "/{empId}/address/{addressId}")
@@ -166,9 +147,7 @@ public class EmployeeController {
     return mapper.map(addressDtoPatched, AddressRest.class);
   }
 
-  /**
-   * http://localhost:{port#}/{context-path}/employee/{empId}/child/{childId}
-   */
+  // http://localhost:{port#}/{context-path}/employee/{empId}/child/{childId}
   @ApiOperation(value = "${EmployeeController.patchChild.value}",
                 notes = "${EmployeeController.patchChild.notes}")
   @PatchMapping(path = "/{empId}/child/{childId}")
@@ -185,9 +164,7 @@ public class EmployeeController {
     return mapper.map(childDtoPatched, ChildRest.class);
   }
 
-  /**
-   * http://localhost:{port#}/{context-path}/employee/{empId}
-   */
+  // http://localhost:{port#}/{context-path}/employee/{empId}
   @ApiOperation(value = "${EmployeeController.deleteEmployee.value}",
                 notes = "${EmployeeController.deleteEmployee.notes}")
   @DeleteMapping(path = "/{empId}")
@@ -197,9 +174,7 @@ public class EmployeeController {
     employeeService.deleteEmployee(empId);
   }
 
-  /**
-   * http://localhost:{port#}/{context-path}/employee/{empId}/general-details/{detailsId}
-   */
+  // http://localhost:{port#}/{context-path}/employee/{empId}/general-details/{detailsId}
   @ApiOperation(value = "${EmployeeController.getEmployeeGeneralDetails.value}",
                 notes = "${EmployeeController.getEmployeeGeneralDetails.notes}")
   @GetMapping(path = "/{empId}/general-details/{detailsId}")
@@ -208,15 +183,13 @@ public class EmployeeController {
           @PathVariable String empId,
           @ApiParam(value = "General details public id", example = "e.g. fgRwCPzJnXpqCvr0XmGX", required = true)
           @PathVariable String detailsId) {
-    GeneralDetailsDto detailsDto = generalDetailsService.getEmployeeGeneralDetails(detailsId);
+    GeneralDetailsDto detailsDto = employeeService.getEmployeeGeneralDetails(detailsId);
     GeneralDetailsRest detailsRest = mapper.map(detailsDto, GeneralDetailsRest.class);
 
     return EntityModel.of(detailsRest, employeeLink(empId));
   }
 
-  /**
-   * http://localhost:{port#}/{context-path}/employee/{empId}/spouse/{spouseId}
-   */
+  // http://localhost:{port#}/{context-path}/employee/{empId}/spouse/{spouseId}
   @ApiOperation(value = "${EmployeeController.getEmployeeSpouseDetails.value}",
                 notes = "${EmployeeController.getEmployeeSpouseDetails.notes}")
   @GetMapping(path = "/{empId}/spouse/{spouseId}")
@@ -225,15 +198,13 @@ public class EmployeeController {
           @PathVariable String empId,
           @ApiParam(value = "Spouse public id", example = "e.g. yFHWSuHs2DlgjikSpP02", required = true)
           @PathVariable String spouseId) {
-    SpouseDto spouseDto = spouseService.getSpouse(spouseId);
+    SpouseDto spouseDto = employeeService.getSpouse(spouseId);
     SpouseRest spouseRest = mapper.map(spouseDto, SpouseRest.class);
 
     return EntityModel.of(spouseRest, employeeLink(empId));
   }
 
-  /**
-   * http://localhost:{port#}/{context-path}/employee/{empId}/address/{addressId}
-   */
+  // http://localhost:{port#}/{context-path}/employee/{empId}/address/{addressId}
   @ApiOperation(value = "${EmployeeController.getEmployeeAddress.value}",
                 notes = "${EmployeeController.getEmployeeAddress.notes}")
   @GetMapping(path = "/{empId}/address/{addressId}")
@@ -242,22 +213,20 @@ public class EmployeeController {
           @PathVariable String empId,
           @ApiParam(value = "Address public id", example = "e.g. dWgnpLpv7daEo3p8Cz3f", required = true)
           @PathVariable String addressId) {
-    AddressDto addressDto = addressService.getAddress(addressId);
+    AddressDto addressDto = employeeService.getAddress(addressId);
     AddressRest addressRest = mapper.map(addressDto, AddressRest.class);
 
     return EntityModel.of(addressRest, employeeLink(empId), addressesLink(empId));
   }
 
-  /**
-   * http://localhost:{port#}/{context-path}/employee/{empId}/addresses
-   */
+  // http://localhost:{port#}/{context-path}/employee/{empId}/addresses
   @ApiOperation(value = "${EmployeeController.getEmployeeAddresses.value}",
                 notes = "${EmployeeController.getEmployeeAddresses.notes}")
   @GetMapping(path = "/{empId}/addresses")
   public CollectionModel<AddressRest> getEmployeeAddresses(
           @ApiParam(value = "Employee public id", example = "e.g. TmpTb4efBF9IqS46Zrio", required = true)
           @PathVariable String empId) {
-    List<AddressDto> addressDto = addressService.getAddresses(empId);
+    List<AddressDto> addressDto = employeeService.getAddresses(empId);
     List<AddressRest> addressRest = mapper.map(addressDto, new TypeToken<List<AddressRest>>() {
     }.getType());
 
@@ -274,9 +243,7 @@ public class EmployeeController {
     return CollectionModel.of(addressRest, employeeLink(empId));
   }
 
-  /**
-   * http://localhost:{port#}/{context-path}/employee/{empId}/child/{childId}
-   */
+  // http://localhost:{port#}/{context-path}/employee/{empId}/child/{childId}
   @ApiOperation(value = "${EmployeeController.getEmployeeChild.value}",
                 notes = "${EmployeeController.getEmployeeChild.notes}")
   @GetMapping(path = "/{empId}/child/{childId}")
@@ -285,22 +252,20 @@ public class EmployeeController {
           @PathVariable String empId,
           @ApiParam(value = "Child public id", example = "e.g. Jv0aPkvQcG8D53hiRzM2", required = true)
           @PathVariable String childId) {
-    ChildDto childDto = childService.getChild(childId);
+    ChildDto childDto = employeeService.getChild(childId);
     ChildRest childRest = mapper.map(childDto, ChildRest.class);
 
-    return EntityModel.of(childRest, employeeLink(empId));
+    return EntityModel.of(childRest, employeeLink(empId), childrenLink(empId));
   }
 
-  /**
-   * http://localhost:{port#}/{context-path}/employee/{empId}/children
-   */
+  // http://localhost:{port#}/{context-path}/employee/{empId}/children
   @ApiOperation(value = "${EmployeeController.getChildren.value}",
                 notes = "${EmployeeController.getChildren.notes}")
   @GetMapping(path = "/{empId}/children")
   public CollectionModel<ChildRest> getChildren(
           @ApiParam(value = "Employee public id", example = "e.g. TmpTb4efBF9IqS46Zrio", required = true)
           @PathVariable String empId) {
-    List<ChildDto> childDtoList = childService.getChildren(empId);
+    List<ChildDto> childDtoList = employeeService.getChildren(empId);
     List<ChildRest> childRestList = mapper.map(childDtoList, new TypeToken<List<ChildRest>>() {
     }.getType());
 

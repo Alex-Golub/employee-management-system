@@ -1,11 +1,8 @@
 package edu.mrdrprof.app.service.impl;
 
 import edu.mrdrprof.app.aspects.annotations.PerformanceLogger;
-import edu.mrdrprof.app.exceptions.ExceptionMessages;
-import edu.mrdrprof.app.exceptions.model.AddressNotExistsException;
-import edu.mrdrprof.app.exceptions.model.ChildNotExistsException;
 import edu.mrdrprof.app.exceptions.model.EmployeeExistsException;
-import edu.mrdrprof.app.exceptions.model.EmployeeNotExistsException;
+import edu.mrdrprof.app.exceptions.model.NotExistsException;
 import edu.mrdrprof.app.io.entity.*;
 import edu.mrdrprof.app.repository.*;
 import edu.mrdrprof.app.service.EmployeeService;
@@ -13,6 +10,7 @@ import edu.mrdrprof.app.shared.*;
 import edu.mrdrprof.app.shared.utils.Utils;
 import lombok.AllArgsConstructor;
 import org.modelmapper.ModelMapper;
+import org.modelmapper.TypeToken;
 import org.springframework.beans.BeanUtils;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
@@ -20,6 +18,8 @@ import org.springframework.stereotype.Service;
 import javax.transaction.Transactional;
 import java.util.List;
 import java.util.stream.Collectors;
+
+import static edu.mrdrprof.app.exceptions.ExceptionMessages.*;
 
 /**
  * @author Alex Golub
@@ -35,7 +35,7 @@ public class EmployeeServiceImpl implements EmployeeService {
   private final ChildRepository childRepository;
   private final SpouseRepository spouseRepository;
   private final Utils utils;
-  private final ModelMapper mapper;
+  private final ModelMapper mapper = new ModelMapper();
 
   @Override
   public EmployeeDto createEmployee(EmployeeDto employeeDto) {
@@ -43,10 +43,11 @@ public class EmployeeServiceImpl implements EmployeeService {
             .findGeneralDetailsByEmailAndSsn(employeeDto.getGeneralDetails().getEmail(),
                     employeeDto.getGeneralDetails().getSsn());
     if (emailAndSsn != null) {
-      throw new EmployeeExistsException(ExceptionMessages.EMPLOYEE_EXISTS_BY_EMAIL_SSN.getMsg());
+      throw new EmployeeExistsException(String.format(EMPLOYEE_EXISTS_BY_EMAIL_SSN.getMsg(),
+              emailAndSsn.getEmail(), emailAndSsn.getSsn()));
     }
 
-    Employee entity = utils.employeeDtoToNewEmployeeEntity(employeeDto);
+    Employee entity = employeeDtoToNewEmployeeEntity(employeeDto);
     Employee newEmployee = employeeRepository.save(entity);
 
     return mapper.map(newEmployee, EmployeeDto.class);
@@ -73,7 +74,7 @@ public class EmployeeServiceImpl implements EmployeeService {
       return employee;
     }
 
-    throw new EmployeeNotExistsException(ExceptionMessages.EMPLOYEE_NOT_EXISTS.getMsg());
+    throw new NotExistsException(String.format(EMPLOYEE_NOT_EXISTS.getMsg(), empId));
   }
 
   @Override
@@ -103,7 +104,7 @@ public class EmployeeServiceImpl implements EmployeeService {
     }
   }
 
-  private void updateChildrenList(List<ChildDto> childDtoList, Employee employee) {
+  private void updateChildrenList(List<ChildDto> childDtoList, Employee employee) { // TODO: test
     childRepository.deleteInBatch(employee.getChildren());
     employee.getChildren().clear();
 
@@ -138,7 +139,7 @@ public class EmployeeServiceImpl implements EmployeeService {
   public AddressDto patchAddress(String empId, String addressId, AddressDto addressDto) {
     Address address = addressRepository.findAddressByPublicId(addressId);
     if (address == null) {
-      throw new AddressNotExistsException(ExceptionMessages.ADDRESS_NOT_FOUND.getMsg());
+      throw new NotExistsException(String.format(ADDRESS_NOT_EXISTS.getMsg(), addressId));
     }
 
     BeanUtils.copyProperties(addressDto, address, "id", "employee", "publicId");
@@ -151,7 +152,7 @@ public class EmployeeServiceImpl implements EmployeeService {
   public ChildDto patchChild(String empId, String childId, ChildDto childDto) {
     Child child = childRepository.findChildByPublicId(childId);
     if (child == null) {
-      throw new ChildNotExistsException(ExceptionMessages.CHILD_NOT_FOUND.getMsg());
+      throw new NotExistsException(String.format(CHILD_NOT_EXISTS.getMsg(), childId));
     }
 
     BeanUtils.copyProperties(childDto, child, "id", "employee", "publicId");
@@ -163,5 +164,84 @@ public class EmployeeServiceImpl implements EmployeeService {
   @Override
   public void deleteEmployee(String empId) {
     employeeRepository.deleteByPublicId(empId);
+  }
+
+  @Override
+  public GeneralDetailsDto getEmployeeGeneralDetails(String detailsId) {
+    GeneralDetails details = generalDetailsRepository.findGeneralDetailsByPublicId(detailsId);
+    if (details == null)
+      throw new NotExistsException(String.format(DETAILS_NOT_EXISTS.getMsg(), detailsId));
+
+    return mapper.map(details, GeneralDetailsDto.class);
+  }
+
+  @Override
+  public SpouseDto getSpouse(String spouseId) {
+    Spouse spouse = spouseRepository.findSpouseByPublicId(spouseId);
+    if (spouse == null)
+      throw new NotExistsException(String.format(SPOUSE_NOT_EXISTS.getMsg(), spouseId));
+
+    return mapper.map(spouse, SpouseDto.class);
+  }
+
+  @Override
+  public AddressDto getAddress(String addressId) {
+    Address address = addressRepository.findAddressByPublicId(addressId);
+    if (address == null)
+      throw new NotExistsException(String.format(ADDRESS_NOT_EXISTS.getMsg(), addressId));
+
+    return mapper.map(address, AddressDto.class);
+  }
+
+  @Override
+  public List<AddressDto> getAddresses(String empId) {
+    return mapper.map(getEmployee(empId).getAddresses(), new TypeToken<List<AddressDto>>() {}.getType());
+  }
+
+  @Override
+  public ChildDto getChild(String childId) {
+    Child child = childRepository.findChildByPublicId(childId);
+    if (child == null)
+      throw new NotExistsException(String.format(CHILD_NOT_EXISTS.getMsg(), childId));
+
+    return mapper.map(child, ChildDto.class);
+  }
+
+  @Override
+  public List<ChildDto> getChildren(String empId) {
+    return mapper.map(getEmployee(empId).getChildren(), new TypeToken<List<ChildDto>>() {}.getType());
+  }
+
+  private Employee employeeDtoToNewEmployeeEntity(EmployeeDto empDto) {
+    Employee newEmployee = new Employee();
+
+    GeneralDetails generalDetails = mapper.map(empDto.getGeneralDetails(), GeneralDetails.class);
+    generalDetails.setEmployee(newEmployee); // bind newEmployee with this generalDetails
+    generalDetails.setPublicId(utils.generatePublicId());
+    newEmployee.setGeneralDetails(generalDetails);
+
+    Spouse spouse = mapper.map(empDto.getSpouse(), Spouse.class);
+    spouse.setEmployee(newEmployee);
+    spouse.setPublicId(utils.generatePublicId());
+    newEmployee.setSpouse(spouse);
+
+    List<Address> addressList = mapper.map(empDto.getAddresses(), new TypeToken<List<Address>>() {
+    }.getType());
+    for (Address address : addressList) {
+      address.setEmployee(newEmployee);
+      address.setPublicId(utils.generatePublicId());
+    }
+    newEmployee.setAddresses(addressList);
+
+    List<Child> childList = mapper.map(empDto.getChildren(), new TypeToken<List<Child>>() {
+    }.getType());
+    for (Child child : childList) {
+      child.setEmployee(newEmployee);
+      child.setPublicId(utils.generatePublicId());
+    }
+    newEmployee.setChildren(childList);
+
+    newEmployee.setPublicId(utils.generatePublicId());
+    return newEmployee;
   }
 }

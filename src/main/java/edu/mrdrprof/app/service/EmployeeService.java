@@ -26,4 +26,16 @@ public interface EmployeeService {
   ChildDto patchChild(String empId, String childId, ChildDto childDto);
 
   void deleteEmployee(String empId);
+
+  GeneralDetailsDto getEmployeeGeneralDetails(String detailsId);
+
+  SpouseDto getSpouse(String spouseId);
+
+  AddressDto getAddress(String addressId);
+
+  List<AddressDto> getAddresses(String empId);
+
+  ChildDto getChild(String childId);
+
+  List<ChildDto> getChildren(String empId);
 }

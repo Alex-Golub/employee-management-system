@@ -1,12 +1,10 @@
 package edu.mrdrprof.app.io.entity;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.time.LocalDate;
 import java.util.Date;
 
 /**
@@ -18,6 +16,7 @@ import java.util.Date;
 @AllArgsConstructor
 @Getter
 @Setter
+@Builder
 public class GeneralDetails implements Serializable {
   private static final long serialVersionUID = 8524609962376142285L;
   @Id

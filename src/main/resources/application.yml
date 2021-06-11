@@ -15,8 +15,9 @@ server:
     context-path: "/api"
   error:
     include-message: always
+  port: 8080
 
-# Monitoring
+# Monitoring (actuator)
 management:
   endpoints:
     web:
