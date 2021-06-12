@@ -7,3 +7,5 @@
 - Swagger UI page available at `http://localhost:{port#}/api/swagger-ui/#`
 - Monitoring `/actuator/{endpointName}`
 - Postman collection can be also downloaded from [here](https://mega.nz/file/YLgGgSiJ#dbmJQN81nksXCEuCWJTZWfNiTHCH217UMb0_2qg6CLk)
+
+<a href="https://ibb.co/whMd7pP"><img src="https://i.ibb.co/v4ZchLT/2ohb-Z64-MPJ.gif" alt="Demonstration 👀" border="0"></a>
