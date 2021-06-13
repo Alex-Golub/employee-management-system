@@ -1,0 +1,402 @@
+{
+	"info": {
+		"_postman_id": "eadfac34-29f3-48e9-816b-adfb9e448874",
+		"name": "Employee-Management-System",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "New employee",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"generalDetails\": {\r\n    \"firstName\": \"Bob\",\r\n    \"lastName\": \"Doe\",\r\n    \"email\": \"email@email.com\",\r\n    \"phoneNumber\": \"123-456-789\",\r\n    \"ssn\": \"123\",\r\n    \"sex\": \"Male\",\r\n    \"hireDate\": \"06-06-2015\"\r\n  },\r\n  \"spouse\": {\r\n    \"firstName\": \"Jane\",\r\n    \"lastName\": \"Doe\",\r\n    \"email\": \"jane@email.com\",\r\n    \"phoneNumber\": \"987-654-321\",\r\n    \"ssn\": \"7654321\",\r\n    \"sex\": \"Female\"\r\n  },\r\n  \"addresses\": [\r\n    {\r\n      \"city\": \"Tel-Aviv\",\r\n      \"country\": \"Israel\",\r\n      \"streetName\": \"Dizengoff\",\r\n      \"postalCode\": \"123\",\r\n      \"type\": \"Shipping\"\r\n    },\r\n    {\r\n      \"city\": \"Tel-Aviv\",\r\n      \"country\": \"Israel\",\r\n      \"streetName\": \"Allenby\",\r\n      \"postalCode\": \"4242\",\r\n      \"type\": \"Billing\"\r\n    }\r\n  ],\r\n  \"children\": [\r\n    {\r\n      \"firstName\": \"Mark\",\r\n      \"lastName\": \"Doe\",\r\n      \"sex\": \"Male\",\r\n      \"birthDate\": \"20-01-2010\"\r\n    },\r\n    {\r\n      \"firstName\": \"Sophie\",\r\n      \"lastName\": \"Doe\",\r\n      \"sex\": \"Female\",\r\n      \"birthDate\": \"20-01-2015\"\r\n    }\r\n  ]\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/api/employee",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"employee"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Employee by id",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/api/employee/Fa3bvboDDInhHIZR8KlE",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"employee",
+						"Fa3bvboDDInhHIZR8KlE"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "All employees (paginated)",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/api/employee?page=1&limit=2",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"employee"
+					],
+					"query": [
+						{
+							"key": "page",
+							"value": "1"
+						},
+						{
+							"key": "limit",
+							"value": "2"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Employee",
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"generalDetails\": {\r\n    \"firstName\": \"Alex\",\r\n    \"lastName\": \"Golub\",\r\n    \"email\": \"email@email.com\",\r\n    \"phoneNumber\": \"123-456-789\",\r\n    \"ssn\": \"123\",\r\n    \"sex\": \"Male\",\r\n    \"hireDate\": \"2015-06-05T21:00:00.000+00:00\"\r\n  },\r\n  \"spouse\": {\r\n    \"firstName\": \"K\",\r\n    \"lastName\": \"Smith\",\r\n    \"email\": \"jane@email.com\",\r\n    \"phoneNumber\": \"987-654-321\",\r\n    \"ssn\": \"7654321\",\r\n    \"sex\": \"Female\"\r\n  },\r\n  \"addresses\": [\r\n    {\r\n      \"city\": \"Haifa\",\r\n      \"country\": \"Israel\",\r\n      \"streetName\": \"Dizengoff\",\r\n      \"postalCode\": \"123\",\r\n      \"type\": \"Shipping\"\r\n    }\r\n  ],\r\n  \"children\": []\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/api/employee/u5VxKS0k3d6mdBhek0ds",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"employee",
+						"u5VxKS0k3d6mdBhek0ds"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "General details",
+			"request": {
+				"method": "PATCH",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"firstName\": \"John\",\r\n  \"lastName\": \"Grow\",\r\n  \"email\": \"email@email.co.il\",\r\n  \"phoneNumber\": \"123-456-789\",\r\n  \"ssn\": \"321\",\r\n  \"sex\": \"Male\",\r\n  \"hireDate\": \"06-06-2015\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/api/employee/xnU2pZ6SQAWTUuScJWTE/general-details",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"employee",
+						"xnU2pZ6SQAWTUuScJWTE",
+						"general-details"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Spouse",
+			"request": {
+				"method": "PATCH",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"firstName\": \"Keren\",\r\n  \"lastName\": \"Smith\",\r\n  \"email\": \"jane@email.com\",\r\n  \"phoneNumber\": \"987-654-321\",\r\n  \"ssn\": \"123\",\r\n  \"sex\": \"Female\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/api/employee/xnU2pZ6SQAWTUuScJWTE/spouse",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"employee",
+						"xnU2pZ6SQAWTUuScJWTE",
+						"spouse"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Address",
+			"request": {
+				"method": "PATCH",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"city\": \"Qiryat-Yam\",\r\n  \"country\": \"Israel\",\r\n  \"streetName\": \"Shikun\",\r\n  \"postalCode\": \"321\",\r\n  \"type\": \"Living\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/api/employee/xnU2pZ6SQAWTUuScJWTE/address/qWr8dpPUDx9ZzENB3vsc",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"employee",
+						"xnU2pZ6SQAWTUuScJWTE",
+						"address",
+						"qWr8dpPUDx9ZzENB3vsc"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Child",
+			"request": {
+				"method": "PATCH",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "    {\r\n      \"firstName\": \"Diddly\",\r\n      \"lastName\": \"Doe\",\r\n      \"sex\": \"Female\",\r\n      \"birthDate\": \"20-01-2015\"\r\n    }",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/api/employee/xnU2pZ6SQAWTUuScJWTE/child/Xbuow9smVrtkSWACNvxQ",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"employee",
+						"xnU2pZ6SQAWTUuScJWTE",
+						"child",
+						"Xbuow9smVrtkSWACNvxQ"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Employee",
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/api/employee/HRfFAcXHSBfjW2GSeUVI",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"employee",
+						"HRfFAcXHSBfjW2GSeUVI"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "General details",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/api/employee/YrtShDhPHuUxisoX9B2W/general-details/hRvjiZugEJLKzNb2OFdC",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"employee",
+						"YrtShDhPHuUxisoX9B2W",
+						"general-details",
+						"hRvjiZugEJLKzNb2OFdC"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Spouse details",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/api/employee/YrtShDhPHuUxisoX9B2W/spouse/h3xE4QvFYv64cIYBxVYw",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"employee",
+						"YrtShDhPHuUxisoX9B2W",
+						"spouse",
+						"h3xE4QvFYv64cIYBxVYw"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Address",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/api/employee/xrVk3oF5baRD9SqooVXv/address/YzvdDQnSa2JDnOkiJZpe",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"employee",
+						"xrVk3oF5baRD9SqooVXv",
+						"address",
+						"YzvdDQnSa2JDnOkiJZpe"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Addresses",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/api/employee/xnU2pZ6SQAWTUuScJWTE/addresses",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"employee",
+						"xnU2pZ6SQAWTUuScJWTE",
+						"addresses"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Child",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/api/employee/Afro0EzjW2fwnMDgatnh/child/b1KUwXlv1CYbpd8Qoux4",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"employee",
+						"Afro0EzjW2fwnMDgatnh",
+						"child",
+						"b1KUwXlv1CYbpd8Qoux4"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Children",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/api/employee/xnU2pZ6SQAWTUuScJWTE/children",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"employee",
+						"xnU2pZ6SQAWTUuScJWTE",
+						"children"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
